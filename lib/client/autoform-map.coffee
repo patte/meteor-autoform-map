@@ -39,7 +39,7 @@ Template.afMap.rendered = ->
 
   GoogleMaps.init { libraries: 'places' }, () =>
     mapOptions =
-      zoom: 0
+      zoom: @data.options.zoom
       mapTypeId: google.maps.MapTypeId[@data.options.mapType]
       streetViewControl: false
 
@@ -84,7 +84,7 @@ Template.afMap.rendered = ->
   @$('.js-map').closest('form').on 'reset', =>
     @data.marker.setMap null
     @data.map.setCenter new google.maps.LatLng @data.options.defaultLat, @data.options.defaultLng
-    @data.map.setZoom 0
+    @data.map.setZoom @data.options.zoom
 
 Template.afMap.helpers
   schemaKey: ->
