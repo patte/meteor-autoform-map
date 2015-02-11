@@ -6,6 +6,7 @@ defaults =
   searchBox: false
   autolocate: false
   zoom: 13
+  geocode: false
 
 AutoForm.addInputType 'map',
   template: 'afMap'
@@ -16,6 +17,7 @@ AutoForm.addInputType 'map',
     lng: node.find('.js-lng').val()
   contextAdjust: (ctx) ->
     ctx.loadingGeolocation = new ReactiveVar(false)
+    ctx.loadingGeocode = new ReactiveVar(false)
     ctx
   valueConverters:
     string: (value) ->
@@ -105,6 +107,8 @@ Template.afMap.helpers
       '200px'
   loadingGeolocation: ->
     @loadingGeolocation.get()
+  loadingGeocode: ->
+    @loadingGeocode.get()
 
 Template.afMap.events
   'click .js-locate': (e, t) ->
@@ -118,3 +122,28 @@ Template.afMap.events
       @setMarker @map, location, @options.zoom
       @map.setCenter location
       @loadingGeolocation.set false
+
+  'click .js-geocode': (e, t) ->
+    e.preventDefault()
+    # FIXME
+    formId = $(e.target).closest("form").attr('id')
+    street = AutoForm.getFieldValue(formId, "address.street")
+    zip = AutoForm.getFieldValue(formId, "address.zip")
+    city = AutoForm.getFieldValue(formId, "address.city")
+    #
+    self = this
+    @loadingGeocode.set true
+    new google.maps.Geocoder().geocode
+      address: "#{street}, #{zip} #{city}",
+      (results, status) ->
+        if status is google.maps.GeocoderStatus.OK and results[0] isnt undefined
+          # sadly geometry.location isn't a google.maps.LatLng
+          lat = results[0].geometry.location.lat()
+          lng = results[0].geometry.location.lng()
+          location = new google.maps.LatLng lat, lng
+          self.setMarker self.map, location, self.options.zoom
+          self.map.setCenter location
+        else
+          alert "Geocoding failed! #{status}"
+        self.loadingGeocode.set false
+
