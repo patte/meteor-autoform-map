@@ -15,7 +15,7 @@ AutoForm.addInputType 'map',
     lat: node.find('.js-lat').val()
     lng: node.find('.js-lng').val()
   contextAdjust: (ctx) ->
-    ctx.loading = new ReactiveVar(false)
+    ctx.loadingGeolocation = new ReactiveVar(false)
     ctx
   valueConverters:
     string: (value) ->
@@ -103,8 +103,8 @@ Template.afMap.helpers
       @atts.height + 'px'
     else
       '200px'
-  loading: ->
-    @loading.get()
+  loadingGeolocation: ->
+    @loadingGeolocation.get()
 
 Template.afMap.events
   'click .js-locate': (e, t) ->
@@ -112,9 +112,9 @@ Template.afMap.events
 
     unless navigator.geolocation then return false
 
-    @loading.set true
+    @loadingGeolocation.set true
     navigator.geolocation.getCurrentPosition (position) =>
       location = new google.maps.LatLng position.coords.latitude, position.coords.longitude
       @setMarker @map, location, @options.zoom
       @map.setCenter location
-      @loading.set false
+      @loadingGeolocation.set false
