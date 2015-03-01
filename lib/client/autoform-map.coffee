@@ -22,6 +22,8 @@ AutoForm.addInputType 'map',
   valueConverters:
     string: (value) ->
       "#{value.lat},#{value.lng}"
+    numberArray: (value) ->
+      [value.lng, value.lat]
 
 Template.afMap.rendered = ->
   @data.options = _.extend {}, defaults, @data.atts
