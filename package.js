@@ -1,7 +1,7 @@
 Package.describe({
   name: 'patte:autoform-map',
   summary: 'Edit location coordinates with autoForm',
-  version: '0.0.4',
+  version: '0.0.5',
   git: 'https://github.com/patte/meteor-autoform-map'
 });
 
