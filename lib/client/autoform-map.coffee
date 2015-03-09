@@ -54,6 +54,10 @@ Template.afMap.rendered = ->
 
     @data.map = new google.maps.Map @find('.js-map'), mapOptions
 
+    if typeof @data.value == 'object'
+      if @data.value.length < 2 or !@data.value[0]? or !@data.value[1]
+        @data.value = null
+      
     if @data.value
       if typeof @data.value == 'string'
         location = @data.value.split ','
