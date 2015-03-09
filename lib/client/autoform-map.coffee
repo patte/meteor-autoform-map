@@ -125,8 +125,8 @@ Template.afMap.helpers
     @loadingGeocode.get()
 
 Template.afMap.events
-	'keydown .js-search': (e) ->
-		if e.keyCode == KEY_ENTER then e.preventDefault()
+  'keydown .js-search': (e) ->
+    if e.keyCode == KEY_ENTER then e.preventDefault()
 
   'click .js-locate': (e, t) ->
     e.preventDefault()
